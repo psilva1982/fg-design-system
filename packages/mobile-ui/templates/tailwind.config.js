@@ -4,6 +4,7 @@ module.exports = {
   darkMode: "class",
   content: [
     "./app/**/*.{js,jsx,ts,tsx}",
+    "./src/**/*.{js,jsx,ts,tsx}",
     "./components/**/*.{js,jsx,ts,tsx}",
     "./node_modules/@fg-design-system/mobile-ui/**/*.{js,jsx,ts,tsx}",
   ],
