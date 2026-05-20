@@ -3,6 +3,7 @@ import baseConfig from "../../tsup.base";
 
 export default defineConfig({
   ...baseConfig,
+  format: ["cjs", "esm"],
   entry: ["src/index.ts"],
   external: [
     "react",
