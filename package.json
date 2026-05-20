@@ -1,0 +1,19 @@
+{
+  "name": "fg-design-system",
+  "version": "1.0.0",
+  "private": true,
+  "packageManager": "pnpm@10.25.0",
+  "scripts": {
+    "build": "pnpm -r build",
+    "typecheck": "pnpm -r typecheck",
+    "clean": "pnpm -r clean",
+    "postinstall": "pnpm -r build"
+  },
+  "devDependencies": {
+    "@types/node": "^25.9.1",
+    "@types/react": "^19.1.9",
+    "@types/react-dom": "^19.1.9",
+    "tsup": "^8.5.1",
+    "typescript": "^6.0.3"
+  }
+}
