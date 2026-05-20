@@ -13,7 +13,7 @@
 // resolve relative to the consumer's cwd, not this file, so listing them
 // here would point to the wrong place. Consumers must declare their own.
 module.exports = {
-  darkMode: "class",
+  darkMode: process.env.DARK_MODE ? process.env.DARK_MODE : "class",
   presets: [require("nativewind/preset")],
   safelist: [
     {
