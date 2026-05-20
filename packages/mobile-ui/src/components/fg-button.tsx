@@ -1,4 +1,4 @@
-import { ComponentProps } from "react";
+import { ComponentProps, ReactNode } from "react";
 
 import {
   Button as GluestackButton,
@@ -7,19 +7,23 @@ import {
 } from "../../components/ui/button";
 
 type Props = ComponentProps<typeof GluestackButton> & {
-  label: string;
+  children?: ReactNode;
+  label?: string;
   variant?: "solid" | "outline";
   isLoading?: boolean;
   block?: boolean;
 };
 
 export function FGButton({
+  children,
   label,
   isLoading = false,
   block = false,
   variant = "solid",
   ...rest
 }: Props) {
+  const content = children ?? label;
+
   return (
     <GluestackButton
       variant={variant}
@@ -27,7 +31,11 @@ export function FGButton({
       {...rest}
     >
       {isLoading && <ButtonSpinner color="white" />}
-      <ButtonText className="text-primary-0">{label}</ButtonText>
+      {typeof content === "string" || typeof content === "number" ? (
+        <ButtonText className="text-primary-0">{content}</ButtonText>
+      ) : (
+        content
+      )}
     </GluestackButton>
   );
 }

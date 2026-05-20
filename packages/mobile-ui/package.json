@@ -11,10 +11,17 @@
   "files": [
     "src",
     "components",
+    "bin",
+    "templates",
     "tailwind.config.js",
+    "babel-preset.js",
+    "metro-preset.js",
     "global.css",
     "nativewind-env.d.ts"
   ],
+  "bin": {
+    "fg-mobile-ui-init": "./bin/init.js"
+  },
   "exports": {
     ".": {
       "source": "./src/index.ts",
@@ -24,6 +31,12 @@
     },
     "./tailwind": {
       "default": "./tailwind.config.js"
+    },
+    "./babel": {
+      "default": "./babel-preset.js"
+    },
+    "./metro": {
+      "default": "./metro-preset.js"
     },
     "./global.css": {
       "default": "./global.css"
