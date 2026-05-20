@@ -80,66 +80,55 @@ export function App() {
 
 O `FGUIProvider` é obrigatório — sem ele os tokens de tema e cores não funcionam. O `FGButton` aceita as props `action` (primary, secondary, positive, negative, default), `variant` (solid, outline, link) e `size` (xs, sm, md, lg, xl).
 
-## Setup do Consumidor (ou: "meus botões estão invisíveis")
+## Setup do Consumidor (agora em 1 comando)
 
-Se você está consumindo o `@fg-design-system/mobile-ui` e os componentes aparecem mas as cores parecem ter saido de férias, é porque o Tailwind do seu app não sabe da existência das cores personalizadas do pacote.
+Antes você precisava criar manualmente 5 arquivos (`tailwind.config.js`, `global.css`, `metro.config.js`, `babel.config.js`, `nativewind-env.d.ts`) e torcer pra não errar uma vírgula. Agora não.
 
-Respira, não precisa chorar. Siga os 3 passos abaixo:
+### 1. Instale o pacote e os peers
 
-### 1. Tailwind config — adote o preset
-
-No `tailwind.config.js` do seu app, use o preset do pacote e adicione os sources no `content`:
-
-```js
-/** @type {import('tailwindcss').Config} */
-module.exports = {
-  presets: [require('@fg-design-system/mobile-ui/tailwind')],
-  content: [
-    "./node_modules/@fg-design-system/mobile-ui/src/**/*.{js,jsx,ts,tsx}",
-    "./node_modules/@fg-design-system/mobile-ui/components/**/*.{js,jsx,ts,tsx}",
-    // ... seus paths de sempre (app, components, etc.)
-  ],
-};
+```sh
+pnpm add @fg-design-system/mobile-ui
+pnpm add @gluestack-ui/core @legendapp/motion nativewind \
+  react-native-reanimated react-native-safe-area-context \
+  react-native-svg react-native-worklets
+pnpm add -D tailwindcss@^3.4 prettier-plugin-tailwindcss
 ```
 
-Sem isso o Tailwind simplesmente ignora as classes usadas dentro do pacote. É tipo aquele amigo que não ouve você se não estiver olhando nos olhos.
+### 2. Rode o init
 
-### 2. Tenha um `global.css` no seu app
+Na raiz do seu app Expo:
 
-Garanta que existe um `global.css` no app com os `@tailwind` directives:
-
-```css
-/* app/global.css */
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+```sh
+npx fg-mobile-ui-init
 ```
 
-E importe esse arquivo uma vez no entry do app (ex.: `app/_layout.tsx`):
+Isso cria os 5 arquivos de config — cada um com 1 a 3 linhas, delegando tudo pro pacote:
 
-```ts
-import "./global.css";
+| Arquivo gerado | O que faz |
+|----------------|-----------|
+| `tailwind.config.js` | Estende `@fg-design-system/mobile-ui/tailwind` (cores, fontes, sombras) |
+| `global.css` | Importa `@fg-design-system/mobile-ui/global.css` |
+| `metro.config.js` | Usa `withFGDesignSystem(...)` de `@fg-design-system/mobile-ui/metro` |
+| `babel.config.js` | Aplica `@fg-design-system/mobile-ui/babel` (expo + nativewind + worklets) |
+| `nativewind-env.d.ts` | Tipos do NativeWind pro TypeScript não reclamar |
+
+Se algum desses arquivos já existir, o init faz **skip** (não destrói config existente). Pra forçar sobrescrita:
+
+```sh
+npx fg-mobile-ui-init --force
 ```
 
-> O pacote também expõe um `global.css` em `@fg-design-system/mobile-ui/global.css`, mas a recomendação do NativeWind é que o `input` do Metro aponte para o `global.css` **do seu app** — o do pacote serve só como referência.
+### 3. Importe o CSS uma vez
 
-### 3. Metro config — o NativeWind precisa saber
+No layout raiz do app (ex.: `app/_layout.tsx`):
 
-Certifique-se de que o `withNativeWind` (com **W maiúsculo**) está enrolando seu `metro.config.js`:
-
-```js
-const { getDefaultConfig } = require("expo/metro-config");
-const { withNativeWind } = require("nativewind/metro");
-
-const config = getDefaultConfig(__dirname);
-module.exports = withNativeWind(config, { input: "./global.css" });
+```tsx
+import "../global.css";
 ```
 
-O `input` deve apontar pro `global.css` do seu app (o do passo 2).
+Pronto. Reinicie o Metro com cache limpo (`npx expo start -c`) e os tokens de tema (`bg-primary-500`, `bg-background-light`, etc.) já funcionam.
 
-> **Como o pacote é distribuído em source (.ts/.tsx),** o `babel-preset-expo` do seu app vai transformar o JSX dele automaticamente — é isso que permite o NativeWind injetar o `cssInterop` e converter `className` em `style`. Se você usar Metro/Babel customizado que ignora `node_modules`, adicione `@fg-design-system/mobile-ui` aos arquivos a transpilar.
-
-> **Resumo pra quem tem preguiça de ler:** as cores customizadas do pacote vivem no `tailwind.config.js` dele. Seu app precisa desse config pra gerar as classes. Então use `presets`, aponte o `content` pro `node_modules`, e o NativeWind faz o resto.
+> **Por que esses arquivos ainda existem?** NativeWind v4 compila o Tailwind no momento do build do **app consumidor** (Metro + Babel + scan de `content`). Não dá pra empacotar tudo dentro do pacote — então a estratégia é deixar cada arquivo no mínimo possível e centralizar a lógica no pacote.
 
 ## Convenções (leia ou sofra)
 
