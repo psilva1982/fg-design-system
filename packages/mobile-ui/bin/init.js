@@ -15,6 +15,7 @@ const RUNTIME_PEERS = [
   "@gluestack-ui/core",
   "@legendapp/motion",
   "nativewind",
+  "react-native-css-interop",
   "react-native-reanimated",
   "react-native-safe-area-context",
   "react-native-svg",

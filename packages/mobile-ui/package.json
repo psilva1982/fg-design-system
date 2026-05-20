@@ -49,6 +49,7 @@
     "@gluestack-ui/core": ">=3.0.0",
     "@legendapp/motion": ">=2.4.0",
     "nativewind": ">=4.2.0",
+    "react-native-css-interop": ">=0.1.22",
     "react": ">=19.0.0",
     "react-native": ">=0.85.0",
     "react-native-reanimated": ">=4.1.0",
