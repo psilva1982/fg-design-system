@@ -80,18 +80,14 @@ export function App() {
 
 O `FGUIProvider` é obrigatório — sem ele os tokens de tema e cores não funcionam. O `FGButton` aceita as props `action` (primary, secondary, positive, negative, default), `variant` (solid, outline, link) e `size` (xs, sm, md, lg, xl).
 
-## Setup do Consumidor (agora em 1 comando)
+## Setup do Consumidor (agora em 2 comandos)
 
-Antes você precisava criar manualmente 5 arquivos (`tailwind.config.js`, `global.css`, `metro.config.js`, `babel.config.js`, `nativewind-env.d.ts`) e torcer pra não errar uma vírgula. Agora não.
+Antes você precisava instalar 9 peer deps na mão e criar 5 arquivos de config rezando pra não errar uma vírgula. Agora:
 
-### 1. Instale o pacote e os peers
+### 1. Instale o pacote
 
 ```sh
 pnpm add @fg-design-system/mobile-ui
-pnpm add @gluestack-ui/core @legendapp/motion nativewind \
-  react-native-reanimated react-native-safe-area-context \
-  react-native-svg react-native-worklets
-pnpm add -D tailwindcss@^3.4 prettier-plugin-tailwindcss
 ```
 
 ### 2. Rode o init
@@ -102,7 +98,11 @@ Na raiz do seu app Expo:
 npx fg-mobile-ui-init
 ```
 
-Isso cria os 5 arquivos de config — cada um com 1 a 3 linhas, delegando tudo pro pacote:
+O init faz **tudo** sozinho:
+
+- Detecta seu package manager (pnpm, npm, yarn ou bun) lendo o lockfile.
+- Lê seu `package.json` e instala automaticamente **só os peers que estão faltando** (`@gluestack-ui/core`, `@legendapp/motion`, `nativewind`, `react-native-reanimated`, `react-native-safe-area-context`, `react-native-svg`, `react-native-worklets`, `tailwindcss`, `prettier-plugin-tailwindcss`).
+- Cria os 5 arquivos de config — cada um com 1 a 3 linhas, delegando tudo pro pacote:
 
 | Arquivo gerado | O que faz |
 |----------------|-----------|
@@ -116,6 +116,12 @@ Se algum desses arquivos já existir, o init faz **skip** (não destrói config 
 
 ```sh
 npx fg-mobile-ui-init --force
+```
+
+Pra rodar sem instalar peers (caso você queira gerenciar deps manualmente):
+
+```sh
+npx fg-mobile-ui-init --no-install
 ```
 
 ### 3. Importe o CSS uma vez
