@@ -22,7 +22,7 @@
 pnpm install
 ```
 
-Sim, só isso. O `postinstall` já roda o build de todos os pacotes automaticamente. Você só precisa esperar o terminal terminar de pensar.
+Sim, só isso. O `postinstall` roda o build do `web-ui` automaticamente. O `mobile-ui` é distribuído como source (TS/TSX) — quem compila são o Metro e o Babel do app consumidor, que é o que o NativeWind v4 exige para transformar `className` em `style`.
 
 ## Usando os pacotes
 
@@ -95,35 +95,49 @@ No `tailwind.config.js` do seu app, use o preset do pacote e adicione os sources
 module.exports = {
   presets: [require('@fg-design-system/mobile-ui/tailwind')],
   content: [
-    "./node_modules/@fg-design-system/mobile-ui/**/*.{js,jsx,ts,tsx}",
-    // ... seus paths de sempre
+    "./node_modules/@fg-design-system/mobile-ui/src/**/*.{js,jsx,ts,tsx}",
+    "./node_modules/@fg-design-system/mobile-ui/components/**/*.{js,jsx,ts,tsx}",
+    // ... seus paths de sempre (app, components, etc.)
   ],
 };
 ```
 
 Sem isso o Tailwind simplesmente ignora as classes usadas dentro do pacote. É tipo aquele amigo que não ouve você se não estiver olhando nos olhos.
 
-### 2. Importe o CSS (se não tiver o seu)
+### 2. Tenha um `global.css` no seu app
 
-Se o seu app **não** tem um `global.css` próprio, crie um e importe o do pacote:
+Garanta que existe um `global.css` no app com os `@tailwind` directives:
 
 ```css
 /* app/global.css */
-@import "@fg-design-system/mobile-ui/global.css";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 ```
 
-Se já tem o seu, beleza — só garanta que ele tem os `@tailwind` directives padrão.
+E importe esse arquivo uma vez no entry do app (ex.: `app/_layout.tsx`):
+
+```ts
+import "./global.css";
+```
+
+> O pacote também expõe um `global.css` em `@fg-design-system/mobile-ui/global.css`, mas a recomendação do NativeWind é que o `input` do Metro aponte para o `global.css` **do seu app** — o do pacote serve só como referência.
 
 ### 3. Metro config — o NativeWind precisa saber
 
-Certifique-se de que o `withNativeWind` está enrolando seu metro.config.js:
+Certifique-se de que o `withNativeWind` (com **W maiúsculo**) está enrolando seu `metro.config.js`:
 
 ```js
-const { withNativewind } = require("nativewind/metro");
-module.exports = withNativewind(config, { input: "./global.css" });
+const { getDefaultConfig } = require("expo/metro-config");
+const { withNativeWind } = require("nativewind/metro");
+
+const config = getDefaultConfig(__dirname);
+module.exports = withNativeWind(config, { input: "./global.css" });
 ```
 
-O `input` deve apontar pro seu `global.css` (o do seu app, não o do pacote).
+O `input` deve apontar pro `global.css` do seu app (o do passo 2).
+
+> **Como o pacote é distribuído em source (.ts/.tsx),** o `babel-preset-expo` do seu app vai transformar o JSX dele automaticamente — é isso que permite o NativeWind injetar o `cssInterop` e converter `className` em `style`. Se você usar Metro/Babel customizado que ignora `node_modules`, adicione `@fg-design-system/mobile-ui` aos arquivos a transpilar.
 
 > **Resumo pra quem tem preguiça de ler:** as cores customizadas do pacote vivem no `tailwind.config.js` dele. Seu app precisa desse config pra gerar as classes. Então use `presets`, aponte o `content` pro `node_modules`, e o NativeWind faz o resto.
 

@@ -1,20 +1,20 @@
 /** @type {import('tailwindcss').Config} */
 //
-// Can be used as a preset by consumers:
+// Used as a preset by consumer apps:
 // ```js
 // presets: [require('@fg-design-system/mobile-ui/tailwind')],
 // content: [
-//   "./node_modules/@fg-design-system/mobile-ui/**/*.{js,jsx,ts,tsx}",
+//   "./node_modules/@fg-design-system/mobile-ui/src/**/*.{js,jsx,ts,tsx}",
+//   "./node_modules/@fg-design-system/mobile-ui/components/**/*.{js,jsx,ts,tsx}",
+//   // ...consumer app paths
 // ]
 // ```
+// `content` is intentionally NOT declared here: preset `content` paths
+// resolve relative to the consumer's cwd, not this file, so listing them
+// here would point to the wrong place. Consumers must declare their own.
 module.exports = {
   darkMode: process.env.DARK_MODE ? process.env.DARK_MODE : "class",
-  content: [
-    "./src/**/*.{js,jsx,ts,tsx}",
-    "./components/**/*.{js,jsx,ts,tsx}",
-  ],
   presets: [require("nativewind/preset")],
-  important: "html",
   safelist: [
     {
       pattern:

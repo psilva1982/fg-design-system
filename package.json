@@ -7,7 +7,7 @@
     "build": "pnpm -r build",
     "typecheck": "pnpm -r typecheck",
     "clean": "pnpm -r clean",
-    "postinstall": "pnpm -r build"
+    "postinstall": "pnpm --filter @fg-design-system/web-ui build"
   },
   "devDependencies": {
     "@types/node": "^25.9.1",
