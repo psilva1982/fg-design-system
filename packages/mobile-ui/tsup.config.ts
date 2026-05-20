@@ -8,8 +8,14 @@ export default defineConfig({
   external: [
     "react",
     "react-native",
+    "@gluestack-ui/core",
     "@gluestack-ui/themed",
     "@gluestack-style/react",
-    "react-native-svg"
+    "@legendapp/motion",
+    "nativewind",
+    "react-native-reanimated",
+    "react-native-safe-area-context",
+    "react-native-svg",
+    "react-native-worklets"
   ]
 });
