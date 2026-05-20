@@ -3,7 +3,7 @@ import { vars, cssInterop, useColorScheme } from 'nativewind';
 import { Pressable, ActivityIndicator, View, Text } from 'react-native';
 import { OverlayProvider } from '@gluestack-ui/core/overlay/creator';
 import { ToastProvider } from '@gluestack-ui/core/toast/creator';
-import { jsx } from 'react/jsx-runtime';
+import { jsx, jsxs } from 'react/jsx-runtime';
 import { createButton } from '@gluestack-ui/core/button/creator';
 import { withStyleContext, tva, useStyleContext } from '@gluestack-ui/utils/nativewind-utils';
 import { UIIcon, PrimitiveIcon } from '@gluestack-ui/core/icon/creator';
@@ -644,7 +644,27 @@ ButtonText.displayName = "ButtonText";
 ButtonSpinner.displayName = "ButtonSpinner";
 ButtonIcon.displayName = "ButtonIcon";
 ButtonGroup.displayName = "ButtonGroup";
+function FGButton({
+  label,
+  isLoading = false,
+  block = false,
+  variant = "solid",
+  ...rest
+}) {
+  return /* @__PURE__ */ jsxs(
+    Button,
+    {
+      variant,
+      className: `${block ? "w-full" : "w-fit"} items-center gap-3`,
+      ...rest,
+      children: [
+        isLoading && /* @__PURE__ */ jsx(ButtonSpinner, { color: "white" }),
+        /* @__PURE__ */ jsx(ButtonText, { className: "text-primary-0", children: label })
+      ]
+    }
+  );
+}
 
-export { Button as FGButton, GluestackUIProvider as FGUIProvider };
+export { FGButton, GluestackUIProvider as FGUIProvider, config as mobileUIConfig };
 //# sourceMappingURL=index.mjs.map
 //# sourceMappingURL=index.mjs.map

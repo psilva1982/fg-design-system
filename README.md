@@ -80,6 +80,53 @@ export function App() {
 
 O `FGUIProvider` é obrigatório — sem ele os tokens de tema e cores não funcionam. O `FGButton` aceita as props `action` (primary, secondary, positive, negative, default), `variant` (solid, outline, link) e `size` (xs, sm, md, lg, xl).
 
+## Setup do Consumidor (ou: "meus botões estão invisíveis")
+
+Se você está consumindo o `@fg-design-system/mobile-ui` e os componentes aparecem mas as cores parecem ter saido de férias, é porque o Tailwind do seu app não sabe da existência das cores personalizadas do pacote.
+
+Respira, não precisa chorar. Siga os 3 passos abaixo:
+
+### 1. Tailwind config — adote o preset
+
+No `tailwind.config.js` do seu app, use o preset do pacote e adicione os sources no `content`:
+
+```js
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  presets: [require('@fg-design-system/mobile-ui/tailwind')],
+  content: [
+    "./node_modules/@fg-design-system/mobile-ui/**/*.{js,jsx,ts,tsx}",
+    // ... seus paths de sempre
+  ],
+};
+```
+
+Sem isso o Tailwind simplesmente ignora as classes usadas dentro do pacote. É tipo aquele amigo que não ouve você se não estiver olhando nos olhos.
+
+### 2. Importe o CSS (se não tiver o seu)
+
+Se o seu app **não** tem um `global.css` próprio, crie um e importe o do pacote:
+
+```css
+/* app/global.css */
+@import "@fg-design-system/mobile-ui/global.css";
+```
+
+Se já tem o seu, beleza — só garanta que ele tem os `@tailwind` directives padrão.
+
+### 3. Metro config — o NativeWind precisa saber
+
+Certifique-se de que o `withNativeWind` está enrolando seu metro.config.js:
+
+```js
+const { withNativewind } = require("nativewind/metro");
+module.exports = withNativewind(config, { input: "./global.css" });
+```
+
+O `input` deve apontar pro seu `global.css` (o do seu app, não o do pacote).
+
+> **Resumo pra quem tem preguiça de ler:** as cores customizadas do pacote vivem no `tailwind.config.js` dele. Seu app precisa desse config pra gerar as classes. Então use `presets`, aponte o `content` pro `node_modules`, e o NativeWind faz o resto.
+
 ## Convenções (leia ou sofra)
 
 - Componentes vão em `src/components/`, um diretório por componente

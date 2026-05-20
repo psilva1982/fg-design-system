@@ -1,5 +1,5 @@
 import * as react_jsx_runtime from 'react/jsx-runtime';
-import React from 'react';
+import React, { ComponentProps } from 'react';
 import * as react_native from 'react-native';
 import { ViewProps, View } from 'react-native';
 import * as tailwind_variants from 'tailwind-variants';
@@ -150,4 +150,17 @@ declare const Button: React.ForwardRefExoticComponent<Omit<Omit<Omit<Omit<react_
     context?: any;
 } & React.RefAttributes<React.ForwardRefExoticComponent<react_native.PressableProps & React.RefAttributes<View>>>>>;
 
-export { Button as FGButton, GluestackUIProvider as FGUIProvider };
+type Props = ComponentProps<typeof Button> & {
+    label: string;
+    variant?: "solid" | "outline";
+    isLoading?: boolean;
+    block?: boolean;
+};
+declare function FGButton({ label, isLoading, block, variant, ...rest }: Props): react_jsx_runtime.JSX.Element;
+
+declare const config: {
+    light: Record<string, string>;
+    dark: Record<string, string>;
+};
+
+export { FGButton, GluestackUIProvider as FGUIProvider, type ModeType, config as mobileUIConfig };

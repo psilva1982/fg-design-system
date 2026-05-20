@@ -1,12 +1,17 @@
 /** @type {import('tailwindcss').Config} */
+//
+// Can be used as a preset by consumers:
+// ```js
+// presets: [require('@fg-design-system/mobile-ui/tailwind')],
+// content: [
+//   "./node_modules/@fg-design-system/mobile-ui/**/*.{js,jsx,ts,tsx}",
+// ]
+// ```
 module.exports = {
   darkMode: process.env.DARK_MODE ? process.env.DARK_MODE : "class",
   content: [
-    "./app/**/*.{html,js,jsx,ts,tsx,mdx}",
-    "./components/**/*.{html,js,jsx,ts,tsx,mdx}",
-    "./utils/**/*.{html,js,jsx,ts,tsx,mdx}",
-    "./*.{html,js,jsx,ts,tsx,mdx}",
-    "./src/**/*.{html,js,jsx,ts,tsx,mdx}",
+    "./src/**/*.{js,jsx,ts,tsx}",
+    "./components/**/*.{js,jsx,ts,tsx}",
   ],
   presets: [require("nativewind/preset")],
   important: "html",

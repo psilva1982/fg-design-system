@@ -650,8 +650,29 @@ ButtonText.displayName = "ButtonText";
 ButtonSpinner.displayName = "ButtonSpinner";
 ButtonIcon.displayName = "ButtonIcon";
 ButtonGroup.displayName = "ButtonGroup";
+function FGButton({
+  label,
+  isLoading = false,
+  block = false,
+  variant = "solid",
+  ...rest
+}) {
+  return /* @__PURE__ */ jsxRuntime.jsxs(
+    Button,
+    {
+      variant,
+      className: `${block ? "w-full" : "w-fit"} items-center gap-3`,
+      ...rest,
+      children: [
+        isLoading && /* @__PURE__ */ jsxRuntime.jsx(ButtonSpinner, { color: "white" }),
+        /* @__PURE__ */ jsxRuntime.jsx(ButtonText, { className: "text-primary-0", children: label })
+      ]
+    }
+  );
+}
 
-exports.FGButton = Button;
+exports.FGButton = FGButton;
 exports.FGUIProvider = GluestackUIProvider;
+exports.mobileUIConfig = config;
 //# sourceMappingURL=index.js.map
 //# sourceMappingURL=index.js.map
