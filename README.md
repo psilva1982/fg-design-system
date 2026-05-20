@@ -62,6 +62,24 @@ packages/
 └── web-ui/             # O elegante do shadcn/ui
 ```
 
+## Usando os componentes
+
+```tsx
+import { FGButton, FGUIProvider } from "@fg-design-system/mobile-ui";
+
+export function App() {
+  return (
+    <FGUIProvider mode="light">
+      <FGButton action="primary" variant="solid" size="md">
+        Aperte aqui, vai
+      </FGButton>
+    </FGUIProvider>
+  );
+}
+```
+
+O `FGUIProvider` é obrigatório — sem ele os tokens de tema e cores não funcionam. O `FGButton` aceita as props `action` (primary, secondary, positive, negative, default), `variant` (solid, outline, link) e `size` (xs, sm, md, lg, xl).
+
 ## Convenções (leia ou sofra)
 
 - Componentes vão em `src/components/`, um diretório por componente
